@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do List (EJS)</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    .container { max-width: 500px; margin: 30px auto; background: #fff; padding: 30px 40px 20px 40px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);}
+    h2 { color: #1565c0; text-align: center; margin-bottom: 20px; }
+    .input-container { display: flex; margin-bottom: 16px; }
+    .input { flex: 1; padding: 8px; }
+    .add-btn { padding: 8px 18px; background: #1565c0; color: #fff; border: none; border-radius: 3px; cursor: pointer; }
+    .add-btn:hover { background: #003c8f; }
+    .todo-item { display: flex; align-items: center; margin-bottom: 10px; }
+    .todo-text { flex: 1; }
+    .edit-btn, .remove-btn { margin-left: 8px; padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer; }
+    .edit-btn { background: #ffd600; color: #222; }
+    .edit-btn:hover { background: #fff176; }
+    .remove-btn { background: #e53935; color: #fff; }
+    .remove-btn:hover { background: #b71c1c; }
+    input[type="text"][name="toDo"] { margin-right: 6px; }
+    .error-msg { color: red; margin-bottom: 8px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>EJS To-Do List</h2>
+    <!-- Add Todo Form -->
+    <form action="/save" method="POST" class="input-container">
+      <input
+        name="toDo"
+        type="text"
+        placeholder="Enter a new task"
+        class="input"
+        required
+      />
+      <button type="submit" class="add-btn">Add</button>
+    </form>
+    <% if (error) { %>
+      <div class="error-msg"><%= error %></div>
+    <% } %>
+    <ul style="list-style: none; padding: 0;">
+      <% todos.forEach(function(todo) { %>
+        <li class="todo-item">
+          <!-- Display text -->
+          <span class="todo-text"><%= todo.toDo %></span>
+          <!-- Edit Form -->
+          <form action="/update/<%= todo._id %>" method="POST" style="display:inline;">
+            <input type="text" name="toDo" value="<%= todo.toDo %>" required style="width:100px;">
+            <button type="submit" class="edit-btn">Edit</button>
+          </form>
+          <!-- Delete Form -->
+          <form action="/delete/<%= todo._id %>" method="POST" style="display:inline;">
+            <button type="submit" class="remove-btn" aria-label="Remove task">&times;</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  </div>
+</body>
+</html>
